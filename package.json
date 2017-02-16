@@ -1,0 +1,42 @@
+{
+  "name": "spaces-edgar-facts",
+  "version": "1.0.0",
+  "description": "Spaces Slash command for facts about @apechimp's 🐶, Edgar.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://jcready@github.com/jcready/spaces-edgar-facts.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/jcready/spaces-edgar-facts/issues"
+  },
+  "homepage": "https://github.com/jcready/spaces-edgar-facts#readme",
+  "dependencies": {
+    "edgar-facts": "^1.0.8"
+  },
+  "lanetix": {
+    "defaultParameters": {
+      "command": "/edgar-fact"
+    },
+    "handlers": [
+      {
+        "provisionToken": true,
+        "subject": "spacesPostCreated",
+        "handler": "index",
+        "contentPattern": {
+          "type": "message",
+          "text": {
+            "Fn::GetParameter": [
+              "command"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
