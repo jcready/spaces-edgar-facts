@@ -6,7 +6,7 @@ const promisify = (fn) =>
   (arg) =>
     new Promise((resolve, reject) =>
       fn(arg, (err, res) =>
-        err ? reject(err) : resolve(res) )
+        err ? reject(err) : resolve(res)))
 
 export async function handler ({
   request,
@@ -27,12 +27,12 @@ export async function handler ({
 
   try {
     return await sendFact()
-  } catch (e) {
+  } catch (err) {
     if (err.statusCode === 403) {
       await joinSpace()
       return sendFact()
     }
-    throw e
+    throw err
   }
 
   function sendFact () {
@@ -49,7 +49,7 @@ export async function handler ({
   function joinSpace () {
     return request({
       method: 'POST',
-      path: `/v1/spaces/${spaceId}/members`
+      path: `/v1/spaces/${spaceId}/members`,
       body: ['me']
     })
   }

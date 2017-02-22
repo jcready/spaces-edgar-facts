@@ -4,7 +4,7 @@
   "description": "Spaces Slash command for facts about @apechimp's 🐶, Edgar.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "set NODE_ENV=test && standard **/*.js"
   },
   "repository": {
     "type": "git",
@@ -38,5 +38,8 @@
         }
       }
     ]
+  },
+  "devDependencies": {
+    "standard": "^8.6.0"
   }
 }
