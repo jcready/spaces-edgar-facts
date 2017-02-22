@@ -2,7 +2,13 @@
 
 import edgarFact from 'edgar-facts'
 
-export function handler ({
+const promisify = (fn) =>
+  (arg) =>
+    new Promise((resolve, reject) =>
+      fn(arg, (err, res) =>
+        err ? reject(err) : resolve(res) )
+
+export async function handler ({
   request,
   lxMessage: {
     message: {
@@ -16,13 +22,35 @@ export function handler ({
       }
     }
   }
-}, cb) {
-  request({
-    method: 'POST',
-    path: `/v1/spaces/${spaceId}/conversations/${conversationId}/posts`,
-    body: {
-      text: `Hey <@${userId}>! ${edgarFact()}`,
-      type: 'message'
+}) {
+  request = promisify(request)
+
+  try {
+    return await sendFact()
+  } catch (e) {
+    if (err.statusCode === 403) {
+      await joinSpace()
+      return sendFact()
     }
-  }, cb)
+    throw e
+  }
+
+  function sendFact () {
+    return request({
+      method: 'POST',
+      path: `/v1/spaces/${spaceId}/conversations/${conversationId}/posts`,
+      body: {
+        text: `Hey <@${userId}>! ${edgarFact()}.`,
+        type: 'message'
+      }
+    })
+  }
+
+  function joinSpace () {
+    return request({
+      method: 'POST',
+      path: `/v1/spaces/${spaceId}/members`
+      body: ['me']
+    })
+  }
 }
