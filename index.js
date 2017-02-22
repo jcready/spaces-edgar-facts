@@ -24,15 +24,22 @@ export async function handler ({
   }
 }) {
   request = promisify(request)
+  const fact = edgarFact()
 
   try {
     return await sendFact()
   } catch (err) {
     if (err.statusCode === 403 || err.statusCode === 500) {
-      await joinSpace()
-      return sendFact()
+      try {
+        await joinSpace()
+        return await sendFact()
+      } catch (e) {
+        console.warn('Unable to join space or provide Edgar fact', err)
+      }
+    } else {
+      console.warn('Unable to provide Edgar fact', err)
     }
-    throw err
+    return fact
   }
 
   function sendFact () {
@@ -40,7 +47,7 @@ export async function handler ({
       method: 'POST',
       path: `/v1/spaces/${spaceId}/conversations/${conversationId}/posts`,
       body: {
-        text: `Hey <@${userId}>! ${edgarFact()}.`,
+        text: `Hey <@${userId}>! ${fact}.`,
         type: 'message'
       }
     })
