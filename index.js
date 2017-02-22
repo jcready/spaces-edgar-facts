@@ -28,7 +28,7 @@ export async function handler ({
   try {
     return await sendFact()
   } catch (err) {
-    if (err.statusCode === 403) {
+    if (err.statusCode === 403 || err.statusCode === 500) {
       await joinSpace()
       return sendFact()
     }

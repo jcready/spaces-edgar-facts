@@ -1,6 +1,6 @@
 {
   "name": "spaces-edgar-facts",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Spaces Slash command for facts about @apechimp's 🐶, Edgar.",
   "main": "index.js",
   "scripts": {
